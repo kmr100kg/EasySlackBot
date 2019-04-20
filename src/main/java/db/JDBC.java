@@ -68,6 +68,7 @@ public class JDBC<T> {
     public void initH2DB() throws Exception {
         if (dbInfo.getHost().startsWith("jdbc:h2:")) {
             Path path = Paths.get("./init_db.txt");
+            if (Files.notExists(path)) Files.createFile(path);
             List<String> line = Files.readAllLines(path);
             if (line.isEmpty() || !dbInfo.getHost().equals(line.get(0))) {
                 RunScript.execute(connect(), new FileReader("./init_h2db.sql"));
