@@ -1,6 +1,7 @@
 package reaction.combination;
 
 import reaction.Reaction;
+import utility.common.DateUtil;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import java.util.List;
 public abstract class CombinationReaction implements Reaction {
 
     private boolean doChain;
+    private long runTime;
     protected Deque<ChainReaction> reactions = new ArrayDeque<>();
 
     protected CombinationReaction(List<ChainReaction> reactions) {
@@ -41,6 +43,24 @@ public abstract class CombinationReaction implements Reaction {
 
     public void setDoChain(boolean doChain) {
         this.doChain = doChain;
+    }
+
+    public long getRunTime() {
+        return runTime;
+    }
+
+    public void setRunTime() {
+        this.runTime = DateUtil.getNow();
+    }
+
+    public boolean isOver() {
+        long t = getRunTime();
+        if (t < 1) return false;
+        return DateUtil.getNow() > (t + timeout());
+    }
+
+    public boolean nonOver() {
+        return !isOver();
     }
 
     public boolean overMaxRetryCount() {

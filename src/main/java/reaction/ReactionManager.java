@@ -6,6 +6,7 @@ import org.riversun.slacklet.SlackletResponse;
 import reaction.combination.CombinationReaction;
 import reaction.simple.SimpleReaction;
 import reaction.simple.template.UnknownReaction;
+import utility.common.DateUtil;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -43,23 +44,35 @@ public final class ReactionManager {
             remove(userId);
         } else if (nextReaction instanceof CombinationReaction) {
             CombinationReaction nextCombReaction = (CombinationReaction) nextReaction;
-            if (nextCombReaction.isDoChain()) {
-                boolean result = nextCombReaction.next().run(req, resp);
-                if (result) {
-                    nextCombReaction.remove();
-                    if (nextCombReaction.isChainEmpty()) {
-                        remove(userId);
+            if (nextCombReaction.nonOver()) {
+                if (nextCombReaction.isDoChain()) {
+                    // 初回以降のリアクション
+                    boolean result = nextCombReaction.next().run(req, resp);
+                    nextCombReaction.setRunTime();
+                    if (result) {
+                        nextCombReaction.remove();
+                        if (nextCombReaction.isChainEmpty()) {
+                            // 処理成功＆キューが空ならキャッシュ削除
+                            remove(userId);
+                        }
+                    } else {
+                        nextCombReaction.incrementRetryCount();
+                        if (nextCombReaction.overMaxRetryCount()) {
+                            // 処理失敗＆失敗上限を超えたら失敗メッセージを送信
+                            remove(userId);
+                            resp.reply(ConfigFactory.load().getString("message.common.retryOver"));
+                        }
                     }
                 } else {
-                    nextCombReaction.incrementRetryCount();
-                    if (nextCombReaction.overMaxRetryCount()) {
-                        remove(userId);
-                        resp.reply(ConfigFactory.load().getString("message.common.retryOver"));
-                    }
+                    // 初回のリアクション
+                    nextCombReaction.run(req, resp);
+                    nextCombReaction.setRunTime();
+                    nextCombReaction.setDoChain(true);
                 }
             } else {
-                nextCombReaction.run(req, resp);
-                nextCombReaction.setDoChain(true);
+                // タイムアウトした場合はキャッシュ削除
+                remove(userId);
+                resp.reply(ConfigFactory.load().getString("message.common.timeout"));
             }
         }
         return reactionManager;

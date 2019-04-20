@@ -1,6 +1,6 @@
 # EasySlackBot
 
-riversunさんの[slacklet-examples](https://github.com/riversun/slacklet-examples)に色々実装を足したものです。
+[slacklet](https://github.com/riversun/slacklet)に色々実装を足したものです。
 
 簡単＆お手軽にSlackBotを構築することができます。
 
@@ -285,7 +285,10 @@ public ReactionService() {
 6. BOTが「ダアアアアアアアアアアアアアア！！！！！！！」と返す
 
 という一連の流れを実現できます。
-さらに、途中で入力を間違えた場合は指定した回数分リトライさせることができます。
+それ以外にも以下の機能を実装しています。
+
+- 途中で入力を間違えた場合は指定した回数分リトライさせる
+- 指定した時間会話が途切れた場合タイムアウトさせる
 
 詳細は、`SampleCombReaction`・`ChainReaction1,2`・`ReactionService`の実装を参照してください。
 
@@ -318,13 +321,6 @@ new Scheduler(slackletService, new GoodNightTask()).run();
 
 ## 今後の予定
 
-１．連続した会話にタイムアウト処理を追加する予定です
+１．ユーザごとに実行できるリアクションを区別させられるようにする予定です
 
-２．ユーザごとに実行できるリアクションを区別させられるようにする予定です
-
-３．HogeHogeユーティリティを追加していきます
-
-
-
-
-
+２．HogeHogeユーティリティを追加していきます
