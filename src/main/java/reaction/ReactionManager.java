@@ -58,7 +58,7 @@ public final class ReactionManager {
                     } else {
                         nextCombReaction.incrementRetryCount();
                         if (nextCombReaction.overMaxRetryCount()) {
-                            // 処理失敗＆失敗上限を超えたら失敗メッセージを送信
+                            // 処理失敗＆失敗上限を超えたらメッセージを送信
                             remove(userId);
                             resp.reply(ConfigFactory.load().getString("message.common.retryOver"));
                         }

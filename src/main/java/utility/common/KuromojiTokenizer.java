@@ -21,7 +21,7 @@ public final class KuromojiTokenizer {
                         .build();
             } catch (IOException e) {
                 LogHelper.write(LogLevel.ERROR, "user_dic.csvの読込みに失敗しました", e);
-                tokenizer = new com.atilika.kuromoji.ipadic.Tokenizer.Builder().build();
+                tokenizer = new Tokenizer.Builder().build();
             }
         }
         return tokenizer;
