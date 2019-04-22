@@ -65,7 +65,7 @@
     
     例：
     
-    ```Hoge = new JDBC<Hoge>.find("SELECT * FROM hoge", Hoge.class)```
+    ```Hoge hoge = new JDBC<Hoge>.find("SELECT * FROM hoge", Hoge.class)```
 
 ## 実行方法
     

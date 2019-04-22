@@ -16,17 +16,7 @@ import java.util.stream.Collectors;
  */
 public final class XUtils {
 
-    private static final Config config = ConfigFactory.load();
-
     private XUtils() {}
-
-    /**
-     * application.confからSlackトークンを取得する。
-     * @return Slackトークン
-     */
-    public static String getSlackToken() {
-        return config.getString("slack.bot.token");
-    }
 
     /**
      * 送られてきたメッセージからメンション部分を取り除く。
