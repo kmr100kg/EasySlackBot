@@ -18,11 +18,13 @@ public class SlackChatUtil {
 
     public static boolean delete(String channelId, long timestamp) {
         RequestBody requestBody = new FormBody.Builder()
-                .add(SLACK_TOKEN_KEY, SLACK_TOKEN_VALUE)
                 .add("channel", channelId)
                 .add("ts", String.valueOf(timestamp)).build();
-        Request request = new Request.Builder().url(SLACK_CHAT_DELETE).post(requestBody).build();
-        return getResult(request, "メッセージ削除");
+        Request request = new Request.Builder()
+                .url(SLACK_CHAT_DELETE + "?" + SLACK_TOKEN_KEY + "=" + SLACK_TOKEN_VALUE)
+                .post(requestBody)
+                .build();
+        return getResult(request);
     }
 
     public static boolean post(String channelId, String message) {
@@ -30,11 +32,14 @@ public class SlackChatUtil {
                 .add("channel", channelId)
                 .add("text", message)
                 .build();
-        Request request = new Request.Builder().url(SLACK_CHAT_POST).post(requestBody).build();
-        return getResult(request, "メッセージ投稿");
+        Request request = new Request.Builder()
+                .url(SLACK_CHAT_POST + "?" + SLACK_TOKEN_KEY + "=" + SLACK_TOKEN_VALUE)
+                .post(requestBody)
+                .build();
+        return getResult(request);
     }
 
-    private static boolean getResult(Request request, String actionName) {
+    private static boolean getResult(Request request) {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         try (Response response = client.newCall(request).execute()) {
             ResponseBody responseBody = response.body();
@@ -44,10 +49,10 @@ public class SlackChatUtil {
             String responseJson = responseBody.string();
             boolean result = responseJson.contains("\"ok\":true");
             if (result) {
-                LogHelper.write(LogLevel.INFO, "【成功】" + actionName);
+                LogHelper.write(LogLevel.INFO, responseJson);
                 return true;
             } else {
-                LogHelper.write(LogLevel.INFO, "【失敗】" + actionName);
+                LogHelper.write(LogLevel.ERROR,  responseJson);
                 return false;
             }
         } catch (IOException e) {
