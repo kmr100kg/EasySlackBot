@@ -12,7 +12,7 @@ jobs:
       - name: Create comments
         run: |
           cat << EOF > comments
-          ## サービスごとの影響範囲の確認
+          ## サービスごとの影響範囲の確認！
           - [ ] A
           - [ ] B
           - [ ] C
