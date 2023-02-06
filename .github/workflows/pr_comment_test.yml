@@ -2,7 +2,7 @@ name: pr_comment_test
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, labeled]
 
 jobs:
   comment:
