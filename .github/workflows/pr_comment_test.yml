@@ -6,7 +6,6 @@ on:
 
 jobs:
   add-comment:
-    if: github.event.label.name == 'test'
     runs-on: ubuntu-latest
     permissions:
       issues: write
