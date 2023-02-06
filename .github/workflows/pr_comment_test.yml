@@ -5,22 +5,18 @@ on:
     types: [opened, synchronize, labeled]
 
 jobs:
-  comment:
-    runs-on: ubuntu-latest
+  add-comment:
     if: github.event.label.name == 'test'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
-      - name: Create comments
-        run: |
-          cat << EOF > comments
-          ## サービスごとの影響範囲の確認
-          - [ ] A
-          - [ ] B
-          - [ ] C
-          EOF
-
-      - name: Post comments
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          URL: ${{ github.event.pull_request.html_url }}
-        run:
-          gh pr comment -F ./comments "${URL}"
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@a35cf36e5301d70b76f316e867e7788a55a31dae
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            ## サービスごとの影響範囲の確認
+            - [ ] A
+            - [ ] B
+            - [ ] C
