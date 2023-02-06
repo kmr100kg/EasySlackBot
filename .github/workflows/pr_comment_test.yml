@@ -8,12 +8,14 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
+      - if: ${{ github.event.label.name == 'test' }}
       - name: Create comments
         run: |
           cat << EOF > comments
-          ## テスト
-          * Test
-          * てすと
+          ## サービスごとの影響範囲の確認
+          - [ ] A
+          - [ ] B
+          - [ ] C
           EOF
 
       - name: Post comments
