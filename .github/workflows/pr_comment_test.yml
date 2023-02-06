@@ -7,7 +7,7 @@ on:
 jobs:
   comment:
     runs-on: ubuntu-latest
-    if: ${{ github.event.label.name == 'test' }}
+    if: github.event.label.name == 'test'
     steps:
       - name: Create comments
         run: |
